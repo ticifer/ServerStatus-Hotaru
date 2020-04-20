@@ -1,14 +1,10 @@
-# -*- coding: utf-8 -*-
-# Update by : https://github.com/tenyue/ServerStatus
-# 支持Python版本：2.6 to 3.5
-# 支持操作系统： Linux, OSX, FreeBSD, OpenBSD and NetBSD, both 32-bit and 64-bit architectures
-
+﻿# -*- coding: utf-8 -*-
 
 SERVER = "127.0.0.1"
-PORT = 35601
+PORT = PORT
 USER = "USER"
 PASSWORD = "USER_PASSWORD"
-INTERVAL = 1 #更新间隔
+INTERVAL = 1 #更新间隔，单位：秒
 
 
 import socket
@@ -140,10 +136,11 @@ def liuliang():
     return NET_IN, NET_OUT
 
 def get_network(ip_version):
-	if(ip_version == 4):
-		HOST = "ipv4.google.com"
-	elif(ip_version == 6):
-		HOST = "ipv6.google.com"
+	#if(ip_version == 4):
+	#	HOST = "ipv4.google.com"
+	#elif(ip_version == 6):
+	#	HOST = "ipv6.google.com"
+	HOST = "ipv6.google.com"
 	try:
 		s = socket.create_connection((HOST, 80), 2)
 		return True
@@ -156,7 +153,7 @@ if __name__ == '__main__':
 	while 1:
 		try:
 			print("Connecting...")
-			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
 			s.connect((SERVER, PORT))
 			data = s.recv(1024)
 			if data.find("Authentication required") > -1:
@@ -196,7 +193,7 @@ if __name__ == '__main__':
 
 				array = {}
 				if not timer:
-					array['online' + str(check_ip)] = get_network(check_ip)
+					array['online4'] = get_network(check_ip) #Toyo修改时去掉了IPv6的在线状态
 					timer = 10
 				else:
 					timer -= 1*INTERVAL
